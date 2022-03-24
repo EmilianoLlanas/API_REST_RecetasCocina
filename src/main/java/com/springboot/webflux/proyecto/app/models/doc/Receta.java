@@ -69,6 +69,12 @@ public class Receta {
 	public void setTiempoPreparacion(String tiempoPreparacion){
 		this.tiempoPreparacion = tiempoPreparacion;
 	}
+	public List<Racion> getRaciones() {
+		return raciones;
+	}
+	public void setRaciones(List<Racion> raciones) {
+		this.raciones = raciones;
+	}
 	public String getDescripcion() {
 		return descripcion;
 	}
