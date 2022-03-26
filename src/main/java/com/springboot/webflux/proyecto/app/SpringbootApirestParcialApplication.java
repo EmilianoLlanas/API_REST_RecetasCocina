@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.springboot.webflux.proyecto.app;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import com.example.demo.SpringbootApirestParcialApplication;
+import com.springboot.webflux.proyecto.app.SpringbootApirestParcialApplication;
 import com.springboot.webflux.proyecto.app.models.dao.RecetaDao;
 import com.springboot.webflux.proyecto.app.models.doc.Receta;
 

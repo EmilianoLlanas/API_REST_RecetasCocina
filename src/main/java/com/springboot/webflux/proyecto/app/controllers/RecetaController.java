@@ -1,4 +1,4 @@
-package com.springboot.webflux.proyeto.app.controllers;
+package com.springboot.webflux.proyecto.app.controllers;
 
 import java.net.URI;
 import java.util.Date;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.support.WebExchangeBindException;
 
 import com.springboot.webflux.proyecto.app.models.dao.RecetaDao;
-import com.springboot.webflux.proyecto.app.models.doc.*;
+import com.springboot.webflux.proyecto.app.models.doc.Receta;
 
 import ch.qos.logback.core.status.Status;
 import reactor.core.publisher.Flux;
@@ -37,7 +37,7 @@ public class RecetaController {
 	@Autowired
 	private RecetaDao recetaDao;
 	
-	@GetMapping ("/")
+	@GetMapping
 	public Flux<Receta> listar(@RequestParam(required=false) Map<String,String> qparams) 
 	{
 		qparams.forEach((a,b) -> {
