@@ -41,8 +41,11 @@ public class Receta {
 		
 	}
 	
-	public Receta(String nombre) {
+	public Receta(String nombre, Integer dificultad, String tiempoPreparacion, String descripcion) {
 		this.nombre = nombre;
+		this.dificultad = dificultad;
+		this.tiempoPreparacion = tiempoPreparacion;
+		this.descripcion = descripcion;
 	}
 	
 	public String getId() {

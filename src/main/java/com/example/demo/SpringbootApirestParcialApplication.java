@@ -13,6 +13,7 @@ import reactor.core.publisher.Mono;
 
 import com.example.demo.SpringbootApirestParcialApplication;
 import com.springboot.webflux.proyecto.app.models.dao.RecetaDao;
+import com.springboot.webflux.proyecto.app.models.doc.Receta;
 
 @SpringBootApplication
 public class SpringbootApirestParcialApplication implements CommandLineRunner{
@@ -32,7 +33,22 @@ public class SpringbootApirestParcialApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		// TODO Auto-generated method stub
-		
+	}
+	
+	public Flux<Receta> cargarDatos() 
+	{
+		return Flux.just(new Receta("Huevo con Jamon", 4, "10 minutos", "Rico huevo con jamon"),
+				new Receta("Molletes", 2, "10 minutos", "Rico huevo con jamon"),
+				new Receta("Cochinita", 7, "10 minutos", "Rico huevo con jamon"),
+				new Receta("Cereal", 1, "10 minutos", "Rico huevo con jamon"))
+		.flatMap(receta -> {
+		return recetaDao.save(receta);
+		});
+	}
+	
+	public Mono<Void> limpiarRecetas() 
+	{
+		return mongoTemplate.dropCollection("recetas");
 	}
 
 }
