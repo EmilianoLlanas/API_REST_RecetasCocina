@@ -72,7 +72,7 @@ public class RecetaController {
 	        		  );
 	}
 	
-	@GetMapping("/{nombre}")
+	/*@GetMapping("/{nombre}")
 	public Mono<ResponseEntity<Receta>> consultarN(@PathVariable String nombre) 
 	{
 	  return recetaDao.findById(nombre)
@@ -87,7 +87,7 @@ public class RecetaController {
 	        		  ResponseEntity.notFound().build()
 	        		  
 	        		  );
-	}
+	}*/
 	
 	@PostMapping("")
 	public Mono<ResponseEntity<Map<String, Object>>> crear(@Valid @RequestBody Mono<Receta> monoReceta) 
@@ -132,6 +132,36 @@ public class RecetaController {
 								.badRequest()
 								.body(respuesta));		
 					});
+	}
+	
+	@DeleteMapping("/{id}")
+	public Mono<ResponseEntity<Map<String, Object>>> borrar(@PathVariable String id) {
+		Map<String, Object> respuesta = new HashMap<String, Object>();			
+		return recetaDao.findById(id)
+		
+		          .flatMap(rec -> {
+		        	  			
+		        	  			return recetaDao.delete(rec).then(Mono.just(id));
+		        	  			
+		          })
+		          .defaultIfEmpty("")
+		          .map(check -> {
+		        	  if(check.equals("")) {
+		        		  	
+							respuesta.put("mensaje", "no existe el producto id"+id);
+							respuesta.put("timestamp", new Date());
+							
+							return ResponseEntity.status(HttpStatus.NOT_FOUND)
+									.contentType(MediaType.APPLICATION_JSON)
+									.body(respuesta);
+		        	  }
+		        	  respuesta.put("mensaje", "baja exitosa de la receta con el id"+id);
+						respuesta.put("timestamp", new Date());
+		        	  
+		        	  return ResponseEntity.ok()
+		        	  .contentType(MediaType.APPLICATION_JSON)
+		        	  	.body(respuesta);
+		          });
 	}
 
 }

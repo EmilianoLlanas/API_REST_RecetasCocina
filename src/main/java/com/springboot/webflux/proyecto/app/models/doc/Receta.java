@@ -29,8 +29,8 @@ public class Receta {
 	@NotEmpty
 	private String tiempoPreparacion;
 	
-	@NotNull
-	@NotEmpty
+	//@NotNull
+	//@NotEmpty
 	private List<Racion> raciones;
 	
 	@NotNull

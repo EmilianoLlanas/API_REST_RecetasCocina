@@ -49,7 +49,7 @@ public class IngredienteController {
 							.filter(ingrediente -> null!=nombre ? ingrediente.getNombre().contains(nombre) : true);
 	}
 	
-	/*@PostMapping("")
+	@PostMapping("")
 	public Mono<ResponseEntity<Map<String, Object>>> crear(@Valid @RequestBody Mono<Ingrediente> monoReceta) 
 	{
 		Map<String, Object> respuesta = new HashMap<String, Object>();
@@ -67,7 +67,7 @@ public class IngredienteController {
 		}).onErrorResume(ex -> {
 			return generarError(ex);		
 		});
-	}*/
+	}
 	
 	private Mono<ResponseEntity<Map<String, Object>>> generarError(Throwable ex)
 	{
@@ -94,42 +94,34 @@ public class IngredienteController {
 					});
 	}
 	
-	/*@GetMapping("/{id}")
-	public Mono<ResponseEntity<Receta>> consultar(@PathVariable String id) 
-	{
-	  return recetaDao.findById(id)
-	          .map(receta -> {
-	        	  			return ResponseEntity
-	                        .ok()
-	                        .contentType(MediaType.APPLICATION_JSON)
-	                      .body(receta);
-	          })
-	          
-	          .defaultIfEmpty(
-	        		  ResponseEntity.notFound().build()
-	        		  
-	        		  );
+	@DeleteMapping("/{id}")
+	public Mono<ResponseEntity<Map<String, Object>>> borrar(@PathVariable String id) {
+		Map<String, Object> respuesta = new HashMap<String, Object>();			
+		return ingredienteDao.findById(id)
+		
+		          .flatMap(ing -> {
+		        	  			
+		        	  			return ingredienteDao.delete(ing).then(Mono.just(id));
+		        	  			
+		          })
+		          .defaultIfEmpty("")
+		          .map(check -> {
+		        	  if(check.equals("")) {
+		        		  	
+							respuesta.put("mensaje", "no existe el producto id"+id);
+							respuesta.put("timestamp", new Date());
+							
+							return ResponseEntity.status(HttpStatus.NOT_FOUND)
+									.contentType(MediaType.APPLICATION_JSON)
+									.body(respuesta);
+		        	  }
+		        	  respuesta.put("mensaje", "baja exitosa del ingrediente con el id"+id);
+						respuesta.put("timestamp", new Date());
+		        	  
+		        	  return ResponseEntity.ok()
+		        	  .contentType(MediaType.APPLICATION_JSON)
+		        	  	.body(respuesta);
+		          });
 	}
-	
-	@GetMapping("/{nombre}")
-	public Mono<ResponseEntity<Receta>> consultarN(@PathVariable String nombre) 
-	{
-	  return recetaDao.findById(nombre)
-	          .map(receta -> {
-	        	  			return ResponseEntity
-	                        .ok()
-	                        .contentType(MediaType.APPLICATION_JSON)
-	                      .body(receta);
-	          })
-	          
-	          .defaultIfEmpty(
-	        		  ResponseEntity.notFound().build()
-	        		  
-	        		  );
-	}
-	
-	
-	
-	*/
-
+		
 }
