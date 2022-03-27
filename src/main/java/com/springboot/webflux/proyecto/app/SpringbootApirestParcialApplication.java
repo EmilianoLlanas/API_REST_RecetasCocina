@@ -12,7 +12,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import com.springboot.webflux.proyecto.app.SpringbootApirestParcialApplication;
+import com.springboot.webflux.proyecto.app.models.dao.IngredienteDao;
 import com.springboot.webflux.proyecto.app.models.dao.RecetaDao;
+import com.springboot.webflux.proyecto.app.models.doc.Ingrediente;
 import com.springboot.webflux.proyecto.app.models.doc.Receta;
 
 @SpringBootApplication
@@ -24,6 +26,9 @@ public class SpringbootApirestParcialApplication implements CommandLineRunner{
 	private RecetaDao recetaDao;
 	
 	@Autowired
+	private IngredienteDao ingredienteDao;
+	
+	@Autowired
 	private ReactiveMongoTemplate mongoTemplate;
 
 	public static void main(String[] args) {
@@ -33,6 +38,11 @@ public class SpringbootApirestParcialApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		// TODO Auto-generated method stub
+		/*limpiarRecetas()
+		.thenMany(limpiarIngredientes())
+		.thenMany(cargarDatos())
+		.thenMany(cargarIngredientes())
+		.subscribe(item-> log.info(item.getId()));*/
 	}
 	
 	public Flux<Receta> cargarDatos() 
@@ -49,6 +59,22 @@ public class SpringbootApirestParcialApplication implements CommandLineRunner{
 	public Mono<Void> limpiarRecetas() 
 	{
 		return mongoTemplate.dropCollection("recetas");
+	}
+	
+	public Flux<Ingrediente> cargarIngredientes() 
+	{
+		return Flux.just(new Ingrediente("Huevo"),
+				new Ingrediente("Jamón"),
+				new Ingrediente("Pollo"),
+				new Ingrediente("Sal"))
+		.flatMap(ingrediente -> {
+		return ingredienteDao.save(ingrediente);
+		});
+	}
+	
+	public Mono<Void> limpiarIngredientes() 
+	{
+		return mongoTemplate.dropCollection("ingredientes");
 	}
 
 }
