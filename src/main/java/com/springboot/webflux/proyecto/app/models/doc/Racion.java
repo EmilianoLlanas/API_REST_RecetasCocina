@@ -1,5 +1,6 @@
 package com.springboot.webflux.proyecto.app.models.doc;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
@@ -14,6 +15,7 @@ public class Racion {
 	private int cantidad;
 	
 	@NotNull
+	@Valid
 	private Ingrediente ingrediente;
 	
 	public int getId() {
