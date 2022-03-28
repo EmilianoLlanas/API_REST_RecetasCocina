@@ -99,9 +99,9 @@ public class SpringbootApirestParcialApplication implements CommandLineRunner{
 				.thenMany(		
 				
 				Flux.just(new Receta("Huevo con Jamon", 4, "10 minutos", "Rico huevo con jamon",raciones1),
-				new Receta("Molletes", 2, "10 minutos", "Rico huevo con jamon",raciones2),
-				new Receta("Cochinita", 7, "10 minutos", "Rico huevo con jamon",raciones3),
-				new Receta("Cereal", 1, "10 minutos", "Rico huevo con jamon",raciones4))
+				new Receta("Molletes", 2, "10 minutos", "Rico pan con frijoles y queso derretido",raciones2),
+				new Receta("Cochinita", 7, "10 minutos", "Cocina yucateca",raciones3),
+				new Receta("Cereal", 1, "10 minutos", "El clásico",raciones4))
 		.flatMap(receta -> {
 		return recetaDao.save(receta);
 		}));
