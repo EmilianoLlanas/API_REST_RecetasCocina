@@ -1,4 +1,4 @@
-package com.springboot.webflux.proyeto.app.controllers;
+package com.springboot.webflux.proyecto.app.controllers;
 
 import java.net.URI;
 import java.util.Date;
