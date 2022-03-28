@@ -24,6 +24,7 @@ import org.springframework.web.bind.support.WebExchangeBindException;
 import com.springboot.webflux.proyecto.app.models.dao.RacionDao;
 import com.springboot.webflux.proyecto.app.models.dao.RecetaDao;
 import com.springboot.webflux.proyecto.app.models.doc.Racion;
+import com.springboot.webflux.proyecto.app.models.doc.Receta;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -125,6 +126,8 @@ public class RacionController {
 		           .ok()
 		           .contentType(MediaType.APPLICATION_JSON)
 		           .body(receta.getRaciones());
+		           
+		           
 		      })
 			  .defaultIfEmpty(
 					  ResponseEntity.notFound().build()
