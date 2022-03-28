@@ -38,11 +38,11 @@ public class SpringbootApirestParcialApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		// TODO Auto-generated method stub
-		/*limpiarRecetas()
+		limpiarRecetas()
 		.thenMany(limpiarIngredientes())
 		.thenMany(cargarDatos())
 		.thenMany(cargarIngredientes())
-		.subscribe(item-> log.info(item.getId()));*/
+		.subscribe(item-> log.info(item.getId()));
 	}
 	
 	public Flux<Receta> cargarDatos() 

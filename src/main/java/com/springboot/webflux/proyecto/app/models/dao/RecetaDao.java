@@ -4,6 +4,7 @@ import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 
 import com.springboot.webflux.proyecto.app.models.doc.Receta;
 
-public interface RecetaDao extends ReactiveMongoRepository<Receta, String>{
+import reactor.core.publisher.Flux;
 
+public interface RecetaDao extends ReactiveMongoRepository<Receta, String>{
 }
