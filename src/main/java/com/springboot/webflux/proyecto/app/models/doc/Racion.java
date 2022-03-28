@@ -8,7 +8,7 @@ import org.springframework.data.annotation.Id;
 
 public class Racion {
 	@Id
-	private int id;
+	private String id;
 
 	@NotNull
 	@Positive
@@ -18,10 +18,10 @@ public class Racion {
 	@Valid
 	private Ingrediente ingrediente;
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public int getCantidad() {
@@ -37,6 +37,13 @@ public class Racion {
 
 	public void setIngrediente(Ingrediente i) {
 		this.ingrediente=i;
+	}
+	public Racion() {
+		
+	}
+	public Racion(int can, Ingrediente ing) {
+		this.cantidad = can;
+		this.ingrediente = ing;
 	}
 
 }

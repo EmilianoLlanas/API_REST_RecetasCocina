@@ -13,18 +13,21 @@ import reactor.core.publisher.Mono;
 
 import com.springboot.webflux.proyecto.app.SpringbootApirestParcialApplication;
 import com.springboot.webflux.proyecto.app.models.dao.IngredienteDao;
+import com.springboot.webflux.proyecto.app.models.dao.RacionDao;
 import com.springboot.webflux.proyecto.app.models.dao.RecetaDao;
 import com.springboot.webflux.proyecto.app.models.doc.Ingrediente;
+import com.springboot.webflux.proyecto.app.models.doc.Racion;
 import com.springboot.webflux.proyecto.app.models.doc.Receta;
 
 @SpringBootApplication
 public class SpringbootApirestParcialApplication implements CommandLineRunner{
 	
 	private Logger log = LoggerFactory.getLogger(SpringbootApirestParcialApplication.class);
-	
+	Ingrediente ingrediente1,ingrediente2,ingrediente3,ingrediente4;
 	@Autowired
 	private RecetaDao recetaDao;
-	
+	@Autowired
+	private RacionDao racionDao;
 	@Autowired
 	private IngredienteDao ingredienteDao;
 	
@@ -40,8 +43,10 @@ public class SpringbootApirestParcialApplication implements CommandLineRunner{
 		// TODO Auto-generated method stub
 		limpiarRecetas()
 		.thenMany(limpiarIngredientes())
+		.thenMany(limpiarRaciones())
 		.thenMany(cargarDatos())
 		.thenMany(cargarIngredientes())
+		.thenMany(cargarRaciones())
 		.subscribe(item-> log.info(item.getId()));
 	}
 	
@@ -63,10 +68,14 @@ public class SpringbootApirestParcialApplication implements CommandLineRunner{
 	
 	public Flux<Ingrediente> cargarIngredientes() 
 	{
-		return Flux.just(new Ingrediente("Huevo"),
-				new Ingrediente("Jamón"),
-				new Ingrediente("Pollo"),
-				new Ingrediente("Sal"))
+		ingrediente1 = new Ingrediente("Huevo");
+		ingrediente2 = new Ingrediente("Jamón");
+		ingrediente3 = new Ingrediente("Pollo");
+		ingrediente4 = new Ingrediente("Sal");
+		return Flux.just(ingrediente1,
+				ingrediente2,
+				ingrediente3,
+				ingrediente4)
 		.flatMap(ingrediente -> {
 		return ingredienteDao.save(ingrediente);
 		});
@@ -75,6 +84,24 @@ public class SpringbootApirestParcialApplication implements CommandLineRunner{
 	public Mono<Void> limpiarIngredientes() 
 	{
 		return mongoTemplate.dropCollection("ingredientes");
+	}
+	
+	public Mono<Void> limpiarRaciones() 
+	{
+		return mongoTemplate.dropCollection("racion");
+	}
+	
+	public Flux<Racion> cargarRaciones() 
+	{
+		return Flux.just(
+				new Racion(10,ingrediente1),
+				new Racion(20,ingrediente2),
+				new Racion(30,ingrediente3),
+				new Racion(40,ingrediente4))
+				
+		.flatMap(racion -> {
+		return racionDao.save(racion);
+		});
 	}
 
 }
