@@ -41,11 +41,12 @@ public class Receta {
 		
 	}
 	
-	public Receta(String nombre, Integer dificultad, String tiempoPreparacion, String descripcion) {
+	public Receta(String nombre, Integer dificultad, String tiempoPreparacion, String descripcion, List<Racion> raciones) {
 		this.nombre = nombre;
 		this.dificultad = dificultad;
 		this.tiempoPreparacion = tiempoPreparacion;
 		this.descripcion = descripcion;
+		this.raciones = raciones;
 	}
 	
 	public String getId() {

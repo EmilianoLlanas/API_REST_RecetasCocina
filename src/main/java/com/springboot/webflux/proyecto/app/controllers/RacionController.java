@@ -3,6 +3,7 @@ package com.springboot.webflux.proyecto.app.controllers;
 import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.support.WebExchangeBindException;
 
 import com.springboot.webflux.proyecto.app.models.dao.RacionDao;
+import com.springboot.webflux.proyecto.app.models.dao.RecetaDao;
 import com.springboot.webflux.proyecto.app.models.doc.Racion;
 
 import reactor.core.publisher.Flux;
@@ -32,6 +34,8 @@ public class RacionController {
 	
 	@Autowired
 	private RacionDao racionDao;
+	@Autowired
+	private RecetaDao recetaDao;
 	
 	@GetMapping("/")
 	public Flux<Racion> listar(){
@@ -110,6 +114,22 @@ public class RacionController {
 								.badRequest()
 								.body(respuesta));		
 					});
+	}
+	
+	@GetMapping("/listarRaciones/{id}")
+	public Mono<ResponseEntity<List<Racion>>> consultarRacionesRecetas(@PathVariable String id) {
+	  return recetaDao
+			  .findById(id)
+			  .map(receta -> {
+		           return ResponseEntity
+		           .ok()
+		           .contentType(MediaType.APPLICATION_JSON)
+		           .body(receta.getRaciones());
+		      })
+			  .defaultIfEmpty(
+					  ResponseEntity.notFound().build()
+					  );
+			  
 	}
 
 }
