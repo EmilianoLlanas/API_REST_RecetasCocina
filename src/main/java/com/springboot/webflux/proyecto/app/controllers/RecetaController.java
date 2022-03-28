@@ -163,5 +163,51 @@ public class RecetaController {
 		        	  	.body(respuesta);
 		          });
 	}
+	
+	@PutMapping("/{id}")
+	public Mono<ResponseEntity<Map<String, Object>>> editar(@Valid @RequestBody Mono<Receta> monoReceta,@PathVariable String id) 
+	{
+		Map<String, Object> respuesta = new HashMap<String, Object>();		
+		return monoReceta
+						.flatMap(receta->{
+							return recetaDao.findById(id).
+							flatMap(rec->{
+								rec.setNombre(receta.getNombre());
+								rec.setDificultad(receta.getDificultad());
+								rec.setTiempoPreparacion(receta.getTiempoPreparacion());
+								rec.setDescripcion(receta.getDescripcion());
+								if(receta.getRaciones()!=null) {
+									rec.setRaciones(receta.getRaciones());
+								}
+								
+								return recetaDao.save(rec);
+								
+							})
+							.defaultIfEmpty(new Receta())
+							.map(rec -> {
+								
+								if(null==rec.getId()) {
+									respuesta.put("mensaje", "no se encontró una receta con id:"+id);
+									respuesta.put("timestamp", new Date());
+									
+									return ResponseEntity.status(HttpStatus.NOT_FOUND)
+											.contentType(MediaType.APPLICATION_JSON)
+											.body(respuesta);
+								}
+								
+								
+								respuesta.put("receta", rec);
+								respuesta.put("mensaje", "producto editado con exito");
+								respuesta.put("timestamp", new Date());
+									
+								return ResponseEntity.ok()
+									.contentType(MediaType.APPLICATION_JSON)
+									.body(respuesta);
+								});
+						}).onErrorResume(ex -> {
+							return generarError(ex);		
+						});
+		
+	}
 
 }
