@@ -45,48 +45,52 @@ public class RecetaController {
 			
 		});
 		String nombre = qparams.get("nombre");
-		String dificultad = qparams.get("dificultad");
-		String tiempoPreparacion = qparams.get("tiempoPreparacion");
-		String descripcion = qparams.get("descripcion");
 		return recetaDao.findAll()
-							.filter(receta -> null!=nombre ? receta.getNombre().contains(nombre) : true)
-							.filter(receta -> null!=dificultad ? receta.getDificultad()<=Integer.parseInt(dificultad) : true)
-							.filter(receta -> null!=tiempoPreparacion ? receta.getTiempoPreparacion().equals(tiempoPreparacion) : true)
-							.filter(receta -> null!=descripcion ? receta.getDescripcion().equals(descripcion) : true);
+							.filter(receta -> null!=nombre ? receta.getNombre().contains(nombre) : true);
 	}
 	
 	@GetMapping("/{id}")
-	public Mono<ResponseEntity<Receta>> consultar(@PathVariable String id) 
-	{
-	  return recetaDao.findById(id)
-	          .map(receta -> {
-	        	  			return ResponseEntity
-	                        .ok()
-	                        .contentType(MediaType.APPLICATION_JSON)
-	                      .body(receta);
-	          })
-	          
-	          .defaultIfEmpty(
-	        		  ResponseEntity.notFound().build()
-	        		  
-	        		  );
+	public Mono<ResponseEntity<Map<String, Object>>> consultar(@PathVariable String id) {
+		Map<String, Object> respuesta = new HashMap<String, Object>();
+
+		return recetaDao.findById(id)
+			.defaultIfEmpty(new Receta())
+			.map(rec -> {
+				if(null == rec.getId()) {
+					respuesta.put("message", "No se encontró la receta con ID "+id);
+					respuesta.put("timestamp", new Date());
+					return ResponseEntity.status(HttpStatus.NOT_FOUND)
+							.contentType(MediaType.APPLICATION_JSON)
+							.body(respuesta);
+				} 
+				respuesta.put("receta", rec);
+				return ResponseEntity.ok()
+						.contentType(MediaType.APPLICATION_JSON)
+						.body(respuesta);
+			});
 	}
 	
-	/*@GetMapping("/{nombre}")
-	public Mono<ResponseEntity<Receta>> consultarN(@PathVariable String nombre) 
-	{
-	  return recetaDao.findById(nombre)
-	          .map(receta -> {
-	        	  			return ResponseEntity
-	                        .ok()
-	                        .contentType(MediaType.APPLICATION_JSON)
-	                      .body(receta);
-	          })
-	          
-	          .defaultIfEmpty(
-	        		  ResponseEntity.notFound().build()
-	        		  
-	        		  );
+	/*@GetMapping("/{id}")
+	public Mono<ResponseEntity<Map<String, Object>>> consultar(@PathVariable String id) {
+		Map<String, Object> respuesta = new HashMap<String, Object>();
+
+		return recetaDao.findById(id)
+			.defaultIfEmpty(new Receta())
+			.map(rec -> {
+				if(null == rec.getId()) {
+					respuesta.put("message", "No se encontró la receta con ID "+id);
+					respuesta.put("timestamp", new Date());
+					return ResponseEntity.status(HttpStatus.NOT_FOUND)
+							.contentType(MediaType.APPLICATION_JSON)
+							.body(respuesta);
+				} 
+				respuesta.put("receta", rec);
+				respuesta.put("message", "Consulta Exitosa");
+				respuesta.put("timestamp", new Date());
+				return ResponseEntity.ok()
+						.contentType(MediaType.APPLICATION_JSON)
+						.body(respuesta);
+			});
 	}*/
 	
 	@PostMapping("")
